@@ -37,6 +37,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <be/support/String.h>
 #include <be/interface/Rect.h>
+#include <be/storage/File.h>
 
 class ConfigureClass
 {
