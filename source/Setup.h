@@ -77,9 +77,9 @@ class Setup {
       bool compactMode;
       int32 viewingMode;
       int32 slideshowMode;
-      unsigned long slideshowDelay;
-      long leftMouseAction, rightMouseAction, middleMouseAction, wheelMouseAction;
-      long dragAction;
+      uint32 slideshowDelay;
+      int32 leftMouseAction, rightMouseAction, middleMouseAction, wheelMouseAction;
+      int32 dragAction;
       float fileListRight;
       bool fullscreenStart;
       
