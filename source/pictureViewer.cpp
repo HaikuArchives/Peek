@@ -585,11 +585,11 @@ bool PictureViewer::SupportedFormat(const char *s) {
 
 
 void PictureViewer::HandleMimeData(BMessage *e) {
-    int32 numBytes;
+    ssize_t numBytes;
     type_code type;
     const void *data;
     const char *m_type;
-    if (e->GetInfo( B_MIME_TYPE, 0, (char**)&m_type, &type, &numBytes) != B_OK) return;
+    if (e->GetInfo( B_MIME_TYPE, 0, (char**)&m_type, &type) != B_OK) return;
 
     e->FindData(m_type,B_MIME_TYPE,&data,&numBytes);
     BMemoryIO memStream(data, numBytes);
