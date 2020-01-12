@@ -5,7 +5,7 @@
 #include <View.h>
 #include <Entry.h>
 #include <stdlib.h>
-#include <cstring>
+#include <string.h>
 
 class PListItem : public BListItem 
 {
