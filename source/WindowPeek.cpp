@@ -357,8 +357,8 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
 
   // ok
   
-  alles->SetViewColor( mainMenu->ViewColor() );
-  filePane->SetViewColor( mainMenu->ViewColor() );
+  alles->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+  filePane->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
   imagePane->EmptyList();
 
   alles->AddChild( new BScrollView("imagePaneScrollView", imagePane, B_FOLLOW_ALL_SIDES, B_FRAME_EVENTS, true, true, B_NO_BORDER) );
