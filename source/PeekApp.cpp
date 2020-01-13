@@ -6,6 +6,8 @@
 #include <List.h>
 #include <image.h>
 
+#include <private/interface/AboutWindow.h>
+
 
 PeekApp::PeekApp() : BApplication("application/x-vnd.Peek") {
   // set up the Setup object
@@ -117,10 +119,10 @@ void PeekApp::MessageReceived(BMessage* e) {
 }
 
 void PeekApp::AboutRequested() {
- char aboutMsg[255];
- strcpy(aboutMsg,PeekVersion);
- strcat(aboutMsg, words->Return(L_BALERT_ABOUT));
- (new BAlert("AboutBox",aboutMsg, words->Return(L_OK) ))->Go();
+  BAboutWindow* about = new BAboutWindow(PeekVersion, "application/x-vnd.Peek");
+
+  about->AddText(words->Return(L_BALERT_ABOUT));
+  about->Show();
 }
 
 void PeekApp::ShowHTML() {
