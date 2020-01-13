@@ -1,5 +1,7 @@
 #include "PListItem.h"
 
+#include <string.h>
+
 PListItem::PListItem(BEntry *e, char *name) : BListItem()
 {
  theFile = NULL;
