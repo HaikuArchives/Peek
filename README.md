@@ -1,6 +1,8 @@
-Peek
-===================
+# ![PeekIcon](icon.png) Peek
+
 Free image browser and viewer with the aim of of being small, fast, efficient, very functional and intuitive.
+
+![Screenshot](screenshot.png)
 
 I'd like to thank all those people who voted for this application and all those who keep giving me feedback. I really appreciate it.
 
@@ -16,8 +18,7 @@ Some info about Peek:
   *  Configurable drag and drop.
   *  Desktop background manipulation.
 
-SOME THINGS THAT CAN HELP
--------------------------------------------------
+## SOME THINGS THAT CAN HELP
 
 *PEEK CRASHES ON STARTUP*
 
