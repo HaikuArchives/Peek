@@ -6,8 +6,8 @@
 #include "WindowPeek.h"
 
 
-ViewFileList::ViewFileList( BRect R, char* name, Setup* s, Language* w) 
-:  BListView( R, name , B_SINGLE_SELECTION_LIST, B_FOLLOW_ALL_SIDES, B_FRAME_EVENTS | B_WILL_DRAW)
+ViewFileList::ViewFileList(char* name, Setup* s, Language* w) 
+:  BListView(name , B_SINGLE_SELECTION_LIST, B_FRAME_EVENTS | B_WILL_DRAW) //This supports Layout Management.
 {
   setup = s;
   words = w;

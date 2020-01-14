@@ -4,7 +4,7 @@
 #include "WindowPeek.h"
 #include <math.h>
 #include <stdio.h>
-
+#include <GroupLayout.h>
 
 // external threads -- see threads.cpp for the actual functions
 extern int32 selectionWait(void *);
@@ -17,15 +17,21 @@ ViewFile::ViewFile(BRect R, char* name, char* path, Setup *s, Language *w)
    setup = s;
    words = w;
    strcpy( currentPath, path);
-   fileList = new ViewFileList( BRect(10, 10, R.Width() - 5 -  B_V_SCROLL_BAR_WIDTH, R.Height() - 10 - B_H_SCROLL_BAR_HEIGHT), "FileList", setup, words);
+   fileList = new ViewFileList("FileList", setup, words); 
+   //Supports Layout management
    fileList->SetInvocationMessage(new BMessage(PEEK_FILE_INVOKED));
    fileList->SetSelectionMessage(new BMessage(PEEK_FILE_SELECTED));
 
    BuildListing();
 
-   BScrollView *fileListScroll = new BScrollView("fileScroll",fileList, B_FOLLOW_ALL_SIDES, B_FRAME_EVENTS, true, true);
+//   BScrollView *fileListScroll = new BScrollView("fileScroll",fileList, B_FRAME_EVENTS, true, true);
+   //Supports Layout management.	
 
-   AddChild(fileListScroll);
+   BGroupLayout * ViewFileLayout = new BGroupLayout(B_VERTICAL, B_USE_DEFAULT_SPACING);
+   
+   ViewFileLayout.AddView( new BScrollView("fileScroll",fileList, B_FRAME_EVENTS, true, true) );
+   
+   AddChild(ViewFileLayout);
 
    selectionThread = spawn_thread(selectionWait, "selectionThread", B_NORMAL_PRIORITY  , (void*)this);
    resume_thread(selectionThread);
