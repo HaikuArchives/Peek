@@ -333,7 +333,7 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
   AddChild(mainMenu);
   // ---- END OF MENU BAR
 
-  alles = new AllesView( Bounds(), "alles" );
+  alles = new AllesView( BRect(Bounds().left, mainMenu->Bounds().bottom, Bounds().right, Bounds().bottom) , "alles" );
 
 
   float top = mainMenu->Bounds().Height() + 1;
