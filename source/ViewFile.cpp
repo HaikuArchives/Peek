@@ -4,6 +4,7 @@
 #include "WindowPeek.h"
 #include <math.h>
 #include <stdio.h>
+#include <iostream>
 #include <GroupLayout.h>
 
 // external threads -- see threads.cpp for the actual functions
@@ -12,7 +13,7 @@ extern int32 slideshowThread(void *);
 
 
 ViewFile::ViewFile(BRect R, char* name, char* path, Setup *s, Language *w)
-:  BView(R,name, B_FOLLOW_TOP_BOTTOM, B_WILL_DRAW | B_FRAME_EVENTS)
+:  BView(R,name, B_FOLLOW_TOP_BOTTOM, B_WILL_DRAW | B_FRAME_EVENTS | B_SUPPORTS_LAYOUT)
 {
    setup = s;
    words = w;
@@ -21,18 +22,36 @@ ViewFile::ViewFile(BRect R, char* name, char* path, Setup *s, Language *w)
    //Supports Layout management
    fileList->SetInvocationMessage(new BMessage(PEEK_FILE_INVOKED));
    fileList->SetSelectionMessage(new BMessage(PEEK_FILE_SELECTED));
-
+		
    BuildListing();
 
-//   BScrollView *fileListScroll = new BScrollView("fileScroll",fileList, B_FRAME_EVENTS, true, true);
+   BScrollView *fileListScroll = new BScrollView("fileScroll",fileList, B_FRAME_EVENTS, true, true);
    //Supports Layout management.	
-
+   
    BGroupLayout * ViewFileLayout = new BGroupLayout(B_VERTICAL, B_USE_DEFAULT_SPACING);
    
-   ViewFileLayout.AddView( new BScrollView("fileScroll",fileList, B_FRAME_EVENTS, true, true) );
+   ViewFileLayout->AddView( fileListScroll );
+   ViewFileLayout->AddView( fileList );
    
-   AddChild(ViewFileLayout);
-
+   SetLayout(ViewFileLayout);
+   AddChild(fileListScroll);
+   
+/*   std::cerr << fileListScroll->Bounds().bottom << std::endl;
+   std::cerr << fileListScroll->Bounds().top << std::endl;
+   std::cerr << fileListScroll->Bounds().left << std::endl;
+   std::cerr << fileListScroll->Bounds().right << std::endl;
+   std::endl(std::cerr);
+    std::cerr << ViewFileLayout->LayoutArea().bottom << std::endl;
+    std::cerr << ViewFileLayout->LayoutArea().top << std::endl;
+    std::cerr << ViewFileLayout->LayoutArea().left << std::endl;
+    std::cerr << ViewFileLayout->LayoutArea().right << std::endl;
+	std::endl(std::cerr);
+	std::cerr << Bounds().bottom << std::endl;
+	std::cerr << Bounds().left << std::endl;
+	std::cerr << Bounds().right << std::endl;
+	std::cerr << Bounds().top << std::endl;
+	*///For debugging purposes.
+	
    selectionThread = spawn_thread(selectionWait, "selectionThread", B_NORMAL_PRIORITY  , (void*)this);
    resume_thread(selectionThread);
    slideshowThreadID = spawn_thread(slideshowThread, "slideshowThread", B_NORMAL_PRIORITY  , (void*)this);

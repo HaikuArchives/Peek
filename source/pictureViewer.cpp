@@ -7,8 +7,8 @@
 // PictureViewer - will replace picView to enhance the viewing experience
 //                 and people will go "ooh, aah, wow..."
 
-PictureViewer::PictureViewer(BRect R, char* name, Setup* s)
-: BView( R, name, B_FOLLOW_ALL_SIDES, B_WILL_DRAW | B_FRAME_EVENTS )
+PictureViewer::PictureViewer(char* name, Setup* s)
+: BView( name, B_WILL_DRAW | B_FRAME_EVENTS | B_SUPPORTS_LAYOUT)
 {
 
   theRef = NULL;
