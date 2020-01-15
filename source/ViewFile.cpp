@@ -1,10 +1,10 @@
 #include "ViewFile.h"
 #include <Window.h>
 #include <Application.h>
+#include <GroupLayout.h>
 #include "WindowPeek.h"
 #include <math.h>
 #include <stdio.h>
-
 
 // external threads -- see threads.cpp for the actual functions
 extern int32 selectionWait(void *);
@@ -12,21 +12,29 @@ extern int32 slideshowThread(void *);
 
 
 ViewFile::ViewFile(BRect R, char* name, char* path, Setup *s, Language *w)
-:  BView(R,name, B_FOLLOW_TOP_BOTTOM, B_WILL_DRAW | B_FRAME_EVENTS)
+:  BView(R,name, B_FOLLOW_TOP_BOTTOM, B_WILL_DRAW | B_FRAME_EVENTS | B_SUPPORTS_LAYOUT)
 {
    setup = s;
    words = w;
    strcpy( currentPath, path);
-   fileList = new ViewFileList( BRect(10, 10, R.Width() - 5 -  B_V_SCROLL_BAR_WIDTH, R.Height() - 10 - B_H_SCROLL_BAR_HEIGHT), "FileList", setup, words);
+   fileList = new ViewFileList("FileList", setup, words); 
    fileList->SetInvocationMessage(new BMessage(PEEK_FILE_INVOKED));
    fileList->SetSelectionMessage(new BMessage(PEEK_FILE_SELECTED));
-
+		
    BuildListing();
 
-   BScrollView *fileListScroll = new BScrollView("fileScroll",fileList, B_FOLLOW_ALL_SIDES, B_FRAME_EVENTS, true, true);
-
+   BScrollView *fileListScroll = new BScrollView("fileScroll",fileList, B_FRAME_EVENTS, true, true);
+   
+   //Supports Layout management.	
+   
+   BGroupLayout * ViewFileLayout = new BGroupLayout(B_VERTICAL, B_USE_DEFAULT_SPACING);
+   
+   ViewFileLayout->AddView( fileListScroll );
+   ViewFileLayout->AddView( fileList );
+   
+   SetLayout(ViewFileLayout);
    AddChild(fileListScroll);
-
+	
    selectionThread = spawn_thread(selectionWait, "selectionThread", B_NORMAL_PRIORITY  , (void*)this);
    resume_thread(selectionThread);
    slideshowThreadID = spawn_thread(slideshowThread, "slideshowThread", B_NORMAL_PRIORITY  , (void*)this);

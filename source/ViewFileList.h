@@ -14,7 +14,7 @@
 
 class ViewFileList : public BListView {
    public:
-     ViewFileList( BRect , char*, Setup*, Language*);
+     ViewFileList( char*, Setup*, Language*);
      virtual void MessageReceived(BMessage *);
    private:
      Setup *setup;
