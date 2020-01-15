@@ -3,6 +3,7 @@
 #include <NodeMonitor.h>
 #include <Alert.h>
 #include <GridLayout.h>
+#include <Size.h>
 #include <be/kernel/fs_info.h>
 #include <be/storage/Volume.h>
 #include <be/translation/TranslationUtils.h>
@@ -51,7 +52,7 @@ BMenu* WindowPeek::SaveAsMenu( char* name, int32 msgnum) {
 // ------ Constructor
 
 WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
-: BWindow(R,name,B_DOCUMENT_WINDOW,B_WILL_ACCEPT_FIRST_CLICK | B_ASYNCHRONOUS_CONTROLS | B_AUTO_UPDATE_SIZE_LIMITS) {
+: BWindow(R,name,B_DOCUMENT_WINDOW,B_WILL_ACCEPT_FIRST_CLICK | B_ASYNCHRONOUS_CONTROLS) {
 
   setup = s;
   words = w; 
@@ -335,7 +336,6 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
 
   alles = new AllesView( BRect(Bounds().left, mainMenu->Bounds().bottom, Bounds().right, Bounds().bottom) , "alles" );
 
-
   float top = mainMenu->Bounds().Height() + 1;
         menubar_height  = mainMenu->Bounds().Height();
   /*
@@ -351,6 +351,8 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
   
   float right = setup->FileListRight();
   
+  // A temporary rectangle to construct the views. Later during the program's 
+  // execution, the Layout Mangament will give our views dynamic sizes.
   BRect *newFrame = new BRect( 0, top, right, Bounds().Height());
      filePane = new ViewFile( *newFrame , "fileFrame", "/boot/home" , setup, words);
   newFrame->Set( right + 12, top, Bounds().Width() - B_V_SCROLL_BAR_WIDTH - 1, Bounds().Height() - B_H_SCROLL_BAR_HEIGHT - 1 );
@@ -360,6 +362,10 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
   
   alles->SetViewColor(mainMenu -> ViewColor());
   filePane->SetViewColor(mainMenu -> ViewColor());
+  
+  //We don't want the file pane to become too large.
+  //Layout Management will not let the file pane grow larger than 200 pixels.
+  filePane->SetExplicitMaxSize(BSize(200, B_SIZE_UNLIMITED));
   
   imagePane->EmptyList();
   
@@ -372,10 +378,11 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
   allesLayout -> AddView(filePane, 0, 0);
   allesLayout -> AddView(imageScroll, 1, 0, 5, 1);
   
-  allesLayout -> SetColumnWeight(1, 5.0);
+  allesLayout -> SetColumnWeight(1, 3.0);
   
   alles -> SetLayout(allesLayout);
   
+  // The Layout manages the size, alles directly shows the views.
   alles->AddChild( filePane );
   alles->AddChild( imageScroll );
   
