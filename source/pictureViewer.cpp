@@ -8,7 +8,7 @@
 //                 and people will go "ooh, aah, wow..."
 
 PictureViewer::PictureViewer(char* name, Setup* s)
-: BView( name, B_WILL_DRAW | B_FRAME_EVENTS | B_SUPPORTS_LAYOUT )
+: BView( name, B_WILL_DRAW | B_FRAME_EVENTS )
 {
   theRef = NULL;
   thePic = NULL;
