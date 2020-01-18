@@ -7,7 +7,7 @@
 
 
 ViewFileList::ViewFileList(char* name, Setup* s, Language* w) 
-:  BListView(name , B_SINGLE_SELECTION_LIST, B_FRAME_EVENTS | B_WILL_DRAW | B_SUPPORTS_LAYOUT) //This supports Layout Management.
+:  BListView(name , B_SINGLE_SELECTION_LIST, B_FRAME_EVENTS | B_WILL_DRAW)
 {
   setup = s;
   words = w;
