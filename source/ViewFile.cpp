@@ -336,6 +336,20 @@ int32 ViewFile::BuildListing() {
     if (tempEntry.IsDirectory()) isDir = true;
                             else isDir = false;
 
+    if (!isDir) {
+	BNode tempNode( &tempEntry );
+	BNodeInfo tempNodeInfo( &tempNode );
+	char mimeType[B_MIME_TYPE_LENGTH];
+
+	if (tempNodeInfo.GetType(mimeType) != B_OK)
+		continue;
+
+	strtok(mimeType, "/");
+
+	if (strcmp(mimeType, "image") != 0)
+		continue;
+    }
+
     newPList = new PListItem( tempRef, isDir );                            
 
     if ( isDir ) newList->AddItem( (void*) newPList  );
