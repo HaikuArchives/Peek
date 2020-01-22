@@ -14,6 +14,7 @@ PictureViewer::PictureViewer(BRect R, char* name, Setup* s)
   theRef = NULL;
   thePic = NULL;
   setup = s;
+  imgZoom = 1.0;
   SetViewColor(0,0,0);
 }
 
@@ -187,7 +188,10 @@ void PictureViewer::DrawSingleImage( BView *target_view) {
       y = y - thePic->Bounds().Height()/2;
       if (x < 1) x = 1;
       if (y < 1) y = 1;
-      target_view->DrawBitmap( thePic , BPoint(x,y) );
+
+      BRect viewRect(x, y, x+thePic->Bounds().Width()*imgZoom, y+thePic->Bounds().Height()*imgZoom);
+
+      target_view->DrawBitmap( thePic , viewRect );
    }
    
    if (
@@ -196,7 +200,8 @@ void PictureViewer::DrawSingleImage( BView *target_view) {
    {
       for (float i = 0; i < target_view->Bounds().Width(); i += thePic->Bounds().Width()) {
        for (float j = 0; j < target_view->Bounds().Height(); j += thePic->Bounds().Height()) {
-           if (thePic != NULL) target_view->DrawBitmap( thePic, BPoint( i,j ) ); 
+	   BRect viewRect(i, j, i+thePic->Bounds().Width()*imgZoom, j+thePic->Bounds().Height()*imgZoom);
+           if (thePic != NULL) target_view->DrawBitmap( thePic, viewRect );
               else break;
         }
        if (thePic == NULL) break;
@@ -216,6 +221,9 @@ void PictureViewer::DrawSingleImage( BView *target_view) {
 
     float  pic_width  = thePic->Bounds().Width();
     float  pic_height = thePic->Bounds().Height();
+
+    pic_width  *= imgZoom;
+    pic_height *= imgZoom;
     
     float ratio = 1;
     
@@ -237,7 +245,7 @@ void PictureViewer::DrawSingleImage( BView *target_view) {
     new_rect.top    += y;
     new_rect.right  += x;
     new_rect.bottom += y;
-    
+
     target_view->DrawBitmap( thePic, new_rect );
   }
 
@@ -253,8 +261,8 @@ void PictureViewer::ResizeToImage() {
    if (thePic == NULL) return;
   
   // the window needs to be adjusted by byX and byY points
-   float byX = Bounds().Width() - thePic->Bounds().Width() - 3;
-   float byY = Bounds().Height() - thePic->Bounds().Height() - 3;
+   float byX = Bounds().Width() - thePic->Bounds().Width()*imgZoom - 3;
+   float byY = Bounds().Height() - thePic->Bounds().Height()*imgZoom - 3;
   
   // Now we're going to make sure it's still on the screen.
     // get the coordinates
@@ -314,7 +322,7 @@ void PictureViewer::Refresh() {
    if (pointx < 1) pointx = 1;
 
    BRegion viewRegion( Bounds() );
-   viewRegion.Exclude(  BRect(pointx+1,pointy+1, pointx + thePic->Bounds().Width(), pointy + thePic->Bounds().Height()) );
+   viewRegion.Exclude(  BRect(pointx+1,pointy+1, pointx + thePic->Bounds().Width()*imgZoom, pointy + thePic->Bounds().Height()*imgZoom) );
    Invalidate(&viewRegion);
   }
   
@@ -325,7 +333,10 @@ void PictureViewer::Refresh() {
 
     float  pic_width  = thePic->Bounds().Width();
     float  pic_height = thePic->Bounds().Height();
-    
+
+    pic_width  *= imgZoom;
+    pic_height *= imgZoom;
+
     float ratio = 1;
     
     if ( (width - pic_width) < (height - pic_height) )
@@ -346,7 +357,7 @@ void PictureViewer::Refresh() {
     new_rect.top    += y;
     new_rect.right  += x;
     new_rect.bottom += y;
-    
+
     BRegion viewRegion( Bounds() );
     viewRegion.Exclude(  new_rect );
     Invalidate(&viewRegion);
@@ -388,8 +399,8 @@ void PictureViewer::AdjustScrollBars() {
                 // aspect of the Slideshow. Sometimes the program gets here, from the
                 // top of the method and the picture has already been deleted. I've
                 // tried everything to synchronize it all. Maybe I've missed something.
-                if (thePic != NULL) x = thePic->Bounds().Width();
-                if (thePic != NULL) y = thePic->Bounds().Height();
+                if (thePic != NULL) x = thePic->Bounds().Width()*imgZoom;
+                if (thePic != NULL) y = thePic->Bounds().Height()*imgZoom;
   
   if ( Bounds().Width()  > x ) x = 0;
                           else x = x - Bounds().Width();

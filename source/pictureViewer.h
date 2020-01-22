@@ -73,6 +73,9 @@ class PictureViewer : public BView {
     BRect clippingRegion;
     BPoint oldMousePos;
 
+//    Zoom
+    float imgZoom;
+
     Setup *setup;
 };
 
