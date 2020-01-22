@@ -68,6 +68,7 @@
 
 #define P_WHEEL_SCROLL_IMAGE				'P_IS'
 #define P_WHEEL_SCROLL_LIST					'P_IL'
+#define P_WHEEL_ZOOM_IMAGE				'WZOM'
 // end mouse mapping
 
 
