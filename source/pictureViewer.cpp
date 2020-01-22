@@ -283,6 +283,19 @@ void PictureViewer::ResizeToImage() {
    Window()->ResizeBy( - byX, - byY );
 }
 
+void
+PictureViewer::SetZoom(float z)
+{
+	if (z == 0.0)
+		z = 1.0;
+	imgZoom = z;
+}
+
+float
+PictureViewer::GetZoom()
+{
+	return imgZoom;
+}
 
 // This will just get rid of the clipping thingy
 //

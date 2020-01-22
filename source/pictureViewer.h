@@ -38,6 +38,8 @@ class PictureViewer : public BView {
 
     // display controls
     void ResizeToImage();
+    void SetZoom(float);
+    float GetZoom();
   
   private:
     BBitmap* thePic;
