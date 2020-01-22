@@ -25,6 +25,8 @@
 #define PEEK_IMAGE_SCALED_NICELY			'vm04'
 
 #define PEEK_IMAGE_CROP_SELECTION			'PICS'
+#define PEEK_IMAGE_ZOOM_IN				'zoin'
+#define PEEK_IMAGE_ZOOM_OUT				'zout'
 //       ********
 
 #define PEEK_SCREEN_CAPTURE_WITHOUT			'PSCO'

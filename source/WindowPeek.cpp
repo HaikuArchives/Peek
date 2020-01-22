@@ -319,6 +319,12 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
      if (setup->Sliding()) temp->SetMarked(true);
      tempMenu->AddItem( temp );
 
+     tempMenu->AddSeparatorItem();
+
+     temp = new BMenuItem( "Zoom in", new BMessage(PEEK_IMAGE_ZOOM_IN), '+');
+     tempMenu->AddItem( temp );
+     temp = new BMenuItem( "Zoom out", new BMessage(PEEK_IMAGE_ZOOM_OUT), '-');
+     tempMenu->AddItem( temp );
 
   mainMenu->AddItem(tempMenu);
 
@@ -950,6 +956,10 @@ void WindowPeek::MessageReceived(BMessage* e) {
                                     setup->SetSlideshowMode( e->what ); 
                                     MenuTick( e, true , true);
                                     break;
+
+    case PEEK_IMAGE_ZOOM_IN: imagePane->SetZoom(imagePane->GetZoom()+0.1); break;
+    case PEEK_IMAGE_ZOOM_OUT: imagePane->SetZoom(imagePane->GetZoom()-0.1); break;
+
     case PEEK_FILE_LIST_FOLLOW:     
                                     setup->SetFollowFile( !setup->FollowFile() );
                                     MenuTick(e,true,false);

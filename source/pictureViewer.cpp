@@ -286,9 +286,11 @@ void PictureViewer::ResizeToImage() {
 void
 PictureViewer::SetZoom(float z)
 {
-	if (z == 0.0)
-		z = 1.0;
+	if (z <= 0.0)
+		return;
+
 	imgZoom = z;
+	Refresh();
 }
 
 float
