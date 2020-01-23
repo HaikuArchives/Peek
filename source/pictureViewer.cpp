@@ -200,9 +200,11 @@ void PictureViewer::DrawSingleImage( BView *target_view) {
    {
       for (float i = 0; i < target_view->Bounds().Width(); i += thePic->Bounds().Width()) {
        for (float j = 0; j < target_view->Bounds().Height(); j += thePic->Bounds().Height()) {
-	   BRect viewRect(i, j, i+thePic->Bounds().Width()*imgZoom, j+thePic->Bounds().Height()*imgZoom);
-           if (thePic != NULL) target_view->DrawBitmap( thePic, viewRect );
-              else break;
+           if (thePic != NULL) {
+	      BRect viewRect(i, j, i + thePic->Bounds().Width() * imgZoom, j +
+			      thePic->Bounds().Height() * imgZoom);
+              target_view->DrawBitmap( thePic, viewRect );
+	   }
         }
        if (thePic == NULL) break;
       }
@@ -283,18 +285,20 @@ void PictureViewer::ResizeToImage() {
    Window()->ResizeBy( - byX, - byY );
 }
 
+
 void
 PictureViewer::SetZoom(float z)
 {
-	if (z <= 0.0)
+	if (imgZoom == z)
 		return;
 
-	imgZoom = z;
+	imgZoom = z >= 0 ? z : imgZoom;
 	Refresh();
 }
 
+
 float
-PictureViewer::GetZoom()
+PictureViewer::GetZoom() const
 {
 	return imgZoom;
 }
@@ -414,8 +418,10 @@ void PictureViewer::AdjustScrollBars() {
                 // aspect of the Slideshow. Sometimes the program gets here, from the
                 // top of the method and the picture has already been deleted. I've
                 // tried everything to synchronize it all. Maybe I've missed something.
-                if (thePic != NULL) x = thePic->Bounds().Width()*imgZoom;
-                if (thePic != NULL) y = thePic->Bounds().Height()*imgZoom;
+  if (thePic != NULL) {
+    x = thePic->Bounds().Width()*imgZoom;
+    y = thePic->Bounds().Height()*imgZoom;
+  }
   
   if ( Bounds().Width()  > x ) x = 0;
                           else x = x - Bounds().Width();
