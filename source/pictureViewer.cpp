@@ -174,6 +174,8 @@ void PictureViewer::Draw( BRect R ) {
 //
 //
 void PictureViewer::DrawSingleImage( BView *target_view) {
+
+   if (thePic == NULL) return;
    
    int32 mode = setup->ViewingMode();
    
@@ -194,29 +196,26 @@ void PictureViewer::DrawSingleImage( BView *target_view) {
       target_view->DrawBitmap( thePic , viewRect );
    }
    
-   if (
+   else if (
         (mode == PEEK_IMAGE_TILE)
       )
    {
       for (float i = 0; i < target_view->Bounds().Width(); i += thePic->Bounds().Width()) {
        for (float j = 0; j < target_view->Bounds().Height(); j += thePic->Bounds().Height()) {
-           if (thePic != NULL) {
 	      BRect viewRect(i, j, i + thePic->Bounds().Width() * imgZoom, j +
 			      thePic->Bounds().Height() * imgZoom);
               target_view->DrawBitmap( thePic, viewRect );
-	   }
         }
-       if (thePic == NULL) break;
       }
    }
   
    
-   if ( (mode == PEEK_IMAGE_SCALE_TO_WINDOW ) )
+   else if ( (mode == PEEK_IMAGE_SCALE_TO_WINDOW ) )
    {
       target_view->DrawBitmap( thePic, BRect( 1,1, Bounds().Width()-2, Bounds().Height()-2 ) );
    }
 
-  if ( (mode == PEEK_IMAGE_SCALED_NICELY) )
+   else if ( (mode == PEEK_IMAGE_SCALED_NICELY) )
   {
     float width  = target_view->Bounds().Width();
     float height = target_view->Bounds().Height();
@@ -289,10 +288,10 @@ void PictureViewer::ResizeToImage() {
 void
 PictureViewer::SetZoom(float z)
 {
-	if (imgZoom == z)
+	if (z < 0.1 || z > 10)
 		return;
 
-	imgZoom = z >= 0 ? z : imgZoom;
+	imgZoom = z;
 	Refresh();
 }
 
