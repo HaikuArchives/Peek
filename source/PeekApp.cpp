@@ -121,10 +121,7 @@ void PeekApp::MessageReceived(BMessage* e) {
 
 void PeekApp::AboutRequested() {
   BAboutWindow* about = new BAboutWindow(PeekVersion, "application/x-vnd.Peek"); 
-  char aboutMsg[255]; 
-  strcpy(aboutMsg,PeekVersion); 
   about->AddText(words->Return(L_BALERT_ABOUT)); 
-  strcat(aboutMsg, words->Return(L_BALERT_ABOUT));
   about->Show();
 }
 
