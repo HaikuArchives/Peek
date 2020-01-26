@@ -2,6 +2,8 @@
 #include "PeekApp.h"
 #include <NodeMonitor.h>
 #include <Alert.h>
+#include <GridLayout.h>
+#include <Size.h>
 #include <be/kernel/fs_info.h>
 #include <be/storage/Volume.h>
 #include <be/translation/TranslationUtils.h>
@@ -332,8 +334,7 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
   AddChild(mainMenu);
   // ---- END OF MENU BAR
 
-  alles = new AllesView( Bounds(), "alles" );
-
+  alles = new AllesView( BRect(Bounds().left, mainMenu->Bounds().bottom, Bounds().right, Bounds().bottom) , "alles" );
 
   float top = mainMenu->Bounds().Height() + 1;
         menubar_height  = mainMenu->Bounds().Height();
@@ -350,20 +351,41 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
   
   float right = setup->FileListRight();
   
+  // A temporary rectangle to construct the views. Later during the program's 
+  // execution, the Layout Mangament will give our views dynamic sizes.
   BRect *newFrame = new BRect( 0, top, right, Bounds().Height());
      filePane = new ViewFile( *newFrame , "fileFrame", "/boot/home" , setup, words);
   newFrame->Set( right + 12, top, Bounds().Width() - B_V_SCROLL_BAR_WIDTH - 1, Bounds().Height() - B_H_SCROLL_BAR_HEIGHT - 1 );
-     imagePane = new PictureViewer( *newFrame,  "imagePane",  setup );
+     imagePane = new PictureViewer("imagePane",  setup );
 
   // ok
   
-  alles->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-  filePane->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+  alles->SetViewColor(mainMenu -> ViewColor());
+  filePane->SetViewColor(mainMenu -> ViewColor());
+  
+  //We don't want the file pane to become too large.
+  //Layout Management will not let the file pane grow larger than 200 pixels.
+  filePane->SetExplicitMaxSize(BSize(200, B_SIZE_UNLIMITED));
+  
   imagePane->EmptyList();
-
-  alles->AddChild( new BScrollView("imagePaneScrollView", imagePane, B_FOLLOW_ALL_SIDES, B_FRAME_EVENTS, true, true, B_NO_BORDER) );
-  alles->AddChild( filePane  );
-
+  
+  BScrollView * imageScroll = new BScrollView("imagePaneScrollView", imagePane, B_FRAME_EVENTS, true, true, B_NO_BORDER);
+  
+  //Creating a Layout:
+  
+  BGridLayout * allesLayout = new BGridLayout(0.0, B_USE_DEFAULT_SPACING);
+  
+  allesLayout -> AddView(filePane, 0, 0);
+  allesLayout -> AddView(imageScroll, 1, 0, 5, 1);
+  
+  allesLayout -> SetColumnWeight(1, 3.0);
+  
+  alles -> SetLayout(allesLayout);
+  
+  // The Layout manages the size, alles directly shows the views.
+  alles->AddChild( filePane );
+  alles->AddChild( imageScroll );
+  
   AddChild( alles );
   alles->MakeFocus();
   imagePane->Refresh();

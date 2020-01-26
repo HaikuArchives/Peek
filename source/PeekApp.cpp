@@ -5,9 +5,7 @@
 #include <Alert.h>
 #include <List.h>
 #include <image.h>
-
 #include <private/interface/AboutWindow.h>
-
 
 PeekApp::PeekApp() : BApplication("application/x-vnd.Peek") {
   // set up the Setup object
@@ -42,7 +40,10 @@ PeekApp::PeekApp() : BApplication("application/x-vnd.Peek") {
   words = new Language();
   LoadLanguage();
 
-  mainWindow = new WindowPeek( setup->WindowFrame(), "Peek", setup, words);
+  mainWindow = new WindowPeek(setup->WindowFrame(), "Peek", setup, words);
+  
+  // The same size as the default WindowFrame.
+  mainWindow->SetSizeLimits(600, B_SIZE_UNLIMITED, 400, B_SIZE_UNLIMITED);
 }
 
 
@@ -119,9 +120,8 @@ void PeekApp::MessageReceived(BMessage* e) {
 }
 
 void PeekApp::AboutRequested() {
-  BAboutWindow* about = new BAboutWindow(PeekVersion, "application/x-vnd.Peek");
-
-  about->AddText(words->Return(L_BALERT_ABOUT));
+  BAboutWindow* about = new BAboutWindow(PeekVersion, "application/x-vnd.Peek"); 
+  about->AddText(words->Return(L_BALERT_ABOUT)); 
   about->Show();
 }
 
