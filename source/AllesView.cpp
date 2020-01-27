@@ -112,10 +112,7 @@ void AllesView::HandleMouseWheel(int32 ychange) {
 	case P_WHEEL_ZOOM_IMAGE:
 		float zoom = motherWindow->imagePane->GetZoom();
 
-		if (ychange > 0)
-			zoom *= 0.75;
-		else
-			zoom /= 0.75;
+		zoom *= ychange > 0 ? .8 : 1.25;
 
 		motherWindow->imagePane->SetZoom(zoom);
 		break;
