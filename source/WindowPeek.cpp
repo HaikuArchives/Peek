@@ -959,8 +959,8 @@ void WindowPeek::MessageReceived(BMessage* e) {
                                     MenuTick( e, true , true);
                                     break;
 
-    case PEEK_IMAGE_ZOOM_IN: imagePane->SetZoom(imagePane->GetZoom()+0.1); break;
-    case PEEK_IMAGE_ZOOM_OUT: imagePane->SetZoom(imagePane->GetZoom()-0.1); break;
+    case PEEK_IMAGE_ZOOM_IN: imagePane->SetZoom(imagePane->GetZoom()*1.25); break;
+    case PEEK_IMAGE_ZOOM_OUT: imagePane->SetZoom(imagePane->GetZoom()*0.8); break;
 
     case PEEK_FILE_LIST_FOLLOW:     
                                     setup->SetFollowFile( !setup->FollowFile() );
