@@ -98,17 +98,23 @@ void AllesView::HandleMouseWheel(int32 ychange) {
   if (ychange == 0) return;
   WindowPeek* motherWindow = ((WindowPeek*)Window());
 
-  if (motherWindow->setup->WheelMouseAction() == P_WHEEL_SCROLL_LIST) {
-     if ( motherWindow->filePane->SelectNextImage( ychange ) )
-               motherWindow->filePane->fileList->ScrollToSelection();
-  } else {
+  switch (motherWindow->setup->WheelMouseAction()) {
+	case P_WHEEL_SCROLL_LIST:
+		if ( motherWindow->filePane->SelectNextImage( ychange ) )
+			motherWindow->filePane->fileList->ScrollToSelection();
+		break;
+	case P_WHEEL_SCROLL_IMAGE:
+		if (ychange > 0)
+			motherWindow->imagePane->ScrollBy( 0, 20 );
+		else if (ychange < 0)
+			motherWindow->imagePane->ScrollBy( 0, -20 );
+		break;
+	case P_WHEEL_ZOOM_IMAGE:
+		float zoom = motherWindow->imagePane->GetZoom();
 
-     if (ychange > 0)
-        motherWindow->imagePane->ScrollBy( 0, 20 );
-          else if (ychange < 0)
-        motherWindow->imagePane->ScrollBy( 0, -20 );
-   } 
+		zoom *= ychange > 0 ? .8 : 1.25;
 
-
-
+		motherWindow->imagePane->SetZoom(zoom);
+		break;
+  }
 }

@@ -38,6 +38,8 @@ class PictureViewer : public BView {
 
     // display controls
     void ResizeToImage();
+    void SetZoom(float);
+    float GetZoom() const;
   
   private:
     BBitmap* thePic;
@@ -72,6 +74,9 @@ class PictureViewer : public BView {
     bool clipping, busyClipping;
     BRect clippingRegion;
     BPoint oldMousePos;
+
+    // Zoom
+    float imgZoom;
 
     Setup *setup;
 };

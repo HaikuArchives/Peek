@@ -168,6 +168,7 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
          cMenu = new BMenu ( words->Return(L_BMENUITEM_WHEEL_MOUSE) );
            cMenu->AddItem(  new BMenuItem(words->Return(L_BMENUITEM_WHEEL_MOUSE_SCROLL_FILE),  new BMessage(P_WHEEL_SCROLL_LIST) ) );
            cMenu->AddItem(  new BMenuItem(words->Return(L_BMENUITEM_WHEEL_MOUSE_SCROLL_IMAGE), new BMessage(P_WHEEL_SCROLL_IMAGE) ) );
+           cMenu->AddItem(  new BMenuItem("Image zoom", new BMessage(P_WHEEL_ZOOM_IMAGE) ) );
          bMenu->AddItem(cMenu);
 
 
@@ -321,6 +322,12 @@ WindowPeek::WindowPeek( BRect R, char* name , Setup* s, Language *w)
      if (setup->Sliding()) temp->SetMarked(true);
      tempMenu->AddItem( temp );
 
+     tempMenu->AddSeparatorItem();
+
+     temp = new BMenuItem( "Zoom in", new BMessage(PEEK_IMAGE_ZOOM_IN), '+');
+     tempMenu->AddItem( temp );
+     temp = new BMenuItem( "Zoom out", new BMessage(PEEK_IMAGE_ZOOM_OUT), '-');
+     tempMenu->AddItem( temp );
 
   mainMenu->AddItem(tempMenu);
 
@@ -944,6 +951,7 @@ void WindowPeek::MessageReceived(BMessage* e) {
     case B_NODE_MONITOR: filePane->BuildListing(); break;
     case P_WHEEL_SCROLL_IMAGE: setup->SetWheelMouseAction( P_WHEEL_SCROLL_IMAGE ); break;
     case P_WHEEL_SCROLL_LIST:  setup->SetWheelMouseAction( P_WHEEL_SCROLL_LIST  ); break;
+    case P_WHEEL_ZOOM_IMAGE:   setup->SetWheelMouseAction( P_WHEEL_ZOOM_IMAGE   ); break;
     case PEEK_FILE_INVOKED: {   
                                if (filePane->Selected() < 0) return;
                                BEntry *sam = filePane->EntryAt( filePane->Selected() );
@@ -972,6 +980,10 @@ void WindowPeek::MessageReceived(BMessage* e) {
                                     setup->SetSlideshowMode( e->what ); 
                                     MenuTick( e, true , true);
                                     break;
+
+    case PEEK_IMAGE_ZOOM_IN: imagePane->SetZoom(imagePane->GetZoom()*1.25); break;
+    case PEEK_IMAGE_ZOOM_OUT: imagePane->SetZoom(imagePane->GetZoom()*0.8); break;
+
     case PEEK_FILE_LIST_FOLLOW:     
                                     setup->SetFollowFile( !setup->FollowFile() );
                                     MenuTick(e,true,false);
